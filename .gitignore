@@ -41,6 +41,16 @@ yarn-error.log*
 # vercel
 .vercel
 
+# sensitive files
+stitch_api_key.md
+
+# tool configs
+.mcp.json
+.claude/
+CLAUDE.md
+AGENTS.md
+rules/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
