@@ -30,7 +30,7 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql://workerzexit:workerzexit2024@postgres:5432/workerzexit_db
-      NEXTAUTH_URL: http://localhost:3010
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-https://workerzexittw.orka-hw.com}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-workerzexit-taiwan-secret-change-in-production}
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
