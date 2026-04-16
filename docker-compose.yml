@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: workerzexit_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: workerzexit
+      POSTGRES_PASSWORD: workerzexit2024
+      POSTGRES_DB: workerzexit_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U workerzexit -d workerzexit_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: workerzexit_app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://workerzexit:workerzexit2024@postgres:5432/workerzexit_db
+      NEXTAUTH_URL: http://localhost:3010
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-workerzexit-taiwan-secret-change-in-production}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
+      NODE_ENV: production
+    ports:
+      - "3010:3010"
+
+  nginx:
+    image: nginx:alpine
+    container_name: workerzexit_nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  postgres_data:
