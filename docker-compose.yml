@@ -49,10 +49,6 @@ services:
       - source: nginx_conf
         target: /etc/nginx/conf.d/default.conf
 
-configs:
-  nginx_conf:
-    file: ./nginx.conf
-
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: workerzexit_cloudflared
@@ -62,6 +58,10 @@ configs:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-eyJhIjoiMDk0ZmMxZWE4ZDcxYmM1NzQyN2JlOGRlZjQ1Njg0OTYiLCJ0IjoiYTBiNDk2NzQtYWZjYS00ZjA4LWJhMTUtOWY4NTM3ZjY4OGQ2IiwicyI6Ik9HRXlOemd4Wm1RdE5UazNZaTAwT1RJMUxXSXlOMk10TURaak5EUmhZVEZqWldFMSJ9}
     depends_on:
       - nginx
+
+configs:
+  nginx_conf:
+    file: ./nginx.conf
 
 volumes:
   postgres_data:
