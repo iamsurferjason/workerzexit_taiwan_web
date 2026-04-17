@@ -1,6 +1,6 @@
-FROM node:20-alpine AS base
-# 將基礎函式庫移到 base，確保全階段 (deps, builder, runner) 都能正確執行 Prisma 引擎
-RUN apk add --no-cache libc6-compat
+# 使用 Debian Slim 作為基礎，這對 Prisma 和 Next.js 的相容性遠好於 Alpine
+FROM node:20-slim AS base
+RUN apt-get update && apt-get install -y openssl libssl-dev && rm -rf /var/lib/apt/lists/*
 
 FROM base AS deps
 WORKDIR /app
@@ -13,7 +13,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="postgresql://placeholder:5432"
-RUN ./node_modules/.bin/prisma generate
+RUN npx prisma generate
 RUN npm run build
 
 FROM base AS runner
@@ -21,8 +21,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN groupadd --system --gid 1001 nodejs
+RUN useradd --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
