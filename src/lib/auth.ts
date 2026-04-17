@@ -13,30 +13,35 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null
+        try {
+          if (!credentials?.email || !credentials?.password) return null
 
-        const user = await prisma.adminUser.findUnique({
-          where: { email: credentials.email as string },
-        })
+          const user = await prisma.adminUser.findUnique({
+            where: { email: credentials.email as string },
+          })
 
-        if (!user || !user.isActive) return null
+          if (!user || !user.isActive) return null
 
-        const isValid = await bcrypt.compare(
-          credentials.password as string,
-          user.passwordHash
-        )
-        if (!isValid) return null
+          const isValid = await bcrypt.compare(
+            credentials.password as string,
+            user.passwordHash
+          )
+          if (!isValid) return null
 
-        await prisma.adminUser.update({
-          where: { id: user.id },
-          data: { lastLoginAt: new Date() },
-        })
+          await prisma.adminUser.update({
+            where: { id: user.id },
+            data: { lastLoginAt: new Date() },
+          })
 
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          }
+        } catch (error) {
+          console.error('Admin credential authorization failed', error)
+          throw error
         }
       },
     }),

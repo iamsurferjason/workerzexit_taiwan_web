@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # --- 設定變數 ---
 IMAGE_NAME="iamsurferjason/workerzexit_app:latest"

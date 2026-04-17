@@ -31,6 +31,9 @@ services:
       DATABASE_URL: postgresql://workerzexit:workerzexit2024@postgres:5432/workerzexit_db
       NEXTAUTH_URL: ${NEXTAUTH_URL:-https://workerzexittw.orka-hw.com}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-workerzexit-taiwan-secret-change-in-production}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@workerzexit.tw}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-WorkerzExit2024!}
+      ADMIN_NAME: ${ADMIN_NAME:-超級管理員}
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
