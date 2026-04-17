@@ -1,7 +1,11 @@
 import { PrismaClient, AdminRole, ProductTag, NewsStatus, PromotionLayout } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  datasource: {
+    url: process.env.DATABASE_URL
+  }
+})
 
 async function main() {
   console.log('🌱 開始建立初始資料...')
