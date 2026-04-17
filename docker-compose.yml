@@ -36,18 +36,7 @@ services:
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
       NODE_ENV: production
-    ports:
-      - "3010:3010"
-
-  nginx:
-    image: nginx:alpine
-    container_name: workerzexit_nginx
-    restart: unless-stopped
-    depends_on:
-      - app
-    configs:
-      - source: nginx_conf
-        target: /etc/nginx/conf.d/default.conf
+    # 我們一樣不需要在 NAS 開放 3010 port 到公網，靠 Tunnel 即可
 
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -57,11 +46,7 @@ services:
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-eyJhIjoiMDk0ZmMxZWE4ZDcxYmM1NzQyN2JlOGRlZjQ1Njg0OTYiLCJ0IjoiYTBiNDk2NzQtYWZjYS00ZjA4LWJhMTUtOWY4NTM3ZjY4OGQ2IiwicyI6Ik9HRXlOemd4Wm1RdE5UazNZaTAwT1RJMUxXSXlOMk10TURaak5EUmhZVEZqWldFMSJ9}
     depends_on:
-      - nginx
-
-configs:
-  nginx_conf:
-    file: ./nginx.conf
+      - app
 
 volumes:
   postgres_data:
