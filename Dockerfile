@@ -1,5 +1,5 @@
-# 使用 Debian Slim 作為基礎，這對 Prisma 和 Next.js 的相容性遠好於 Alpine
-FROM node:20-slim AS base
+# 升級至 Node 22-slim，解決較新版 Prisma 套件的版本依賴問題 (node >= 22)
+FROM node:22-slim AS base
 RUN apt-get update && apt-get install -y openssl libssl-dev && rm -rf /var/lib/apt/lists/*
 
 FROM base AS deps
@@ -12,8 +12,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# 同時設定 ENV 與執行時的臨時網址，確保 Prisma 100% 讀取到
 ENV DATABASE_URL="postgresql://placeholder:5432"
-RUN npx prisma generate
+RUN DATABASE_URL="postgresql://placeholder:5432" ./node_modules/.bin/prisma generate
 RUN npm run build
 
 FROM base AS runner
