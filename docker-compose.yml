@@ -39,7 +39,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: workerzexit_cloudflared
-    restart: stopped
+    restart: unless-stopped
     command: tunnel --no-autoupdate run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-eyJhIjoiMDk0ZmMxZWE4ZDcxYmM1NzQyN2JlOGRlZjQ1Njg0OTYiLCJ0IjoiYTBiNDk2NzQtYWZjYS00ZjA4LWJhMTUtOWY4NTM3ZjY4OGQ2IiwicyI6Ik9HRXlOemd4Wm1RdE5UazNZaTAwT1RJMUxXSXlOMk10TURaak5EUmhZVEZqWldFMSJ9}
