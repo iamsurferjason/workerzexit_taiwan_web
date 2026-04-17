@@ -20,9 +20,8 @@ services:
       retries: 5
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # 這裡改成直接使用您在 Docker Hub 上的成品鏡像
+    image: iamsurferjason/workerzexit_app:latest
     container_name: workerzexit_app
     restart: unless-stopped
     depends_on:
@@ -36,12 +35,11 @@ services:
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
       NODE_ENV: production
-    # 我們一樣不需要在 NAS 開放 3010 port 到公網，靠 Tunnel 即可
 
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: workerzexit_cloudflared
-    restart: unless-stopped
+    restart: stopped
     command: tunnel --no-autoupdate run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN:-eyJhIjoiMDk0ZmMxZWE4ZDcxYmM1NzQyN2JlOGRlZjQ1Njg0OTYiLCJ0IjoiYTBiNDk2NzQtYWZjYS00ZjA4LWJhMTUtOWY4NTM3ZjY4OGQ2IiwicyI6Ik9HRXlOemd4Wm1RdE5UazNZaTAwT1RJMUxXSXlOMk10TURaak5EUmhZVEZqWldFMSJ9}
