@@ -502,11 +502,30 @@ async function main() {
     const { tags, ...rest } = productData
     await prisma.product.upsert({
       where: { slug: rest.slug },
-      update: {},
+      update: {
+        images: {
+          deleteMany: {},
+          create: [
+            {
+              url: `/製品/ホルダー系/2024_YA_351.jpg`, // 使用現有的圖片作為暫時占位圖
+              alt: rest.name,
+              sortOrder: 0
+            }
+          ]
+        }
+      },
       create: {
         ...rest,
         tags: tags,
-        images: { create: [] },
+        images: {
+          create: [
+            {
+              url: `/製品/ホルダー系/2024_YA_351.jpg`, // 使用現有的圖片作為暫時占位圖
+              alt: rest.name,
+              sortOrder: 0
+            }
+          ]
+        },
       },
     })
   }
