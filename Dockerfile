@@ -11,7 +11,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN DATABASE_URL="postgresql://placeholder:5432" npx prisma generate
+# 這裡使用 ENV 來傳遞編譯時所需的假網址，能大幅提高相容性
+ENV DATABASE_URL="postgresql://placeholder:5432"
+RUN ./node_modules/.bin/prisma generate
 RUN npm run build
 
 FROM base AS runner
