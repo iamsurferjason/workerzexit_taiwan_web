@@ -1,7 +1,8 @@
 FROM node:20-alpine AS base
+# 將基礎函式庫移到 base，確保全階段 (deps, builder, runner) 都能正確執行 Prisma 引擎
+RUN apk add --no-cache libc6-compat
 
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
@@ -11,7 +12,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-# 這裡使用 ENV 來傳遞編譯時所需的假網址，能大幅提高相容性
 ENV DATABASE_URL="postgresql://placeholder:5432"
 RUN ./node_modules/.bin/prisma generate
 RUN npm run build
