@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
@@ -27,8 +28,8 @@ export default async function NewsPage() {
           {news.map((item) => (
             <Link key={item.id} href={`/news/${item.slug}`} className="card-industrial group">
               {item.coverImage && (
-                <div className="aspect-video overflow-hidden">
-                  <img src={item.coverImage} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <div className="relative aspect-video overflow-hidden">
+                  <Image src={item.coverImage} alt={item.title} fill unoptimized sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" className="object-cover group-hover:scale-105 transition-transform duration-300" />
                 </div>
               )}
               <div className="p-5">

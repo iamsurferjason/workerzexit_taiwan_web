@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
-import ProductCard from '@/components/ProductCard'
+import ProductCard, { type ProductCardProduct } from '@/components/ProductCard'
 import Link from 'next/link'
 import { cache } from 'react'
 import { buildMetadata } from '@/lib/seo'
@@ -70,7 +70,7 @@ export default async function CollectionPage({
           <p className="text-sm text-[#555555] mb-6">共 {category.products.length} 件商品</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {category.products.map((product) => (
-              <ProductCard key={product.id} product={product as any} />
+              <ProductCard key={product.id} product={product as ProductCardProduct} />
             ))}
           </div>
         </>

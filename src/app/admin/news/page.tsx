@@ -19,7 +19,15 @@ export default function AdminNewsPage() {
     const res = await fetch('/api/admin/news')
     setItems(await res.json())
   }
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    async function loadNews() {
+      const res = await fetch('/api/admin/news')
+      const data: News[] = await res.json()
+      setItems(data)
+    }
+
+    void loadNews()
+  }, [])
 
   function generateSlug(title: string) {
     return `news-${Date.now()}-${title.slice(0, 10).replace(/\s+/g, '-')}`

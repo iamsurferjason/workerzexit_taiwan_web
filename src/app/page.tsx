@@ -1,7 +1,8 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, ShoppingBag, Shield, Star, Truck } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
-import ProductCard from '@/components/ProductCard'
+import ProductCard, { type ProductCardProduct } from '@/components/ProductCard'
 import PromotionBlock from '@/components/PromotionBlock'
 import HeroCarousel from '@/components/HeroCarousel'
 import { absoluteUrl, buildMetadata, siteConfig } from '@/lib/seo'
@@ -160,7 +161,7 @@ export default async function HomePage() {
         {featuredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product as any} />
+              <ProductCard key={product.id} product={product as ProductCardProduct} />
             ))}
           </div>
         ) : (
@@ -205,8 +206,8 @@ export default async function HomePage() {
             {news.map((item) => (
               <Link key={item.id} href={`/news/${item.slug}`} className="card-industrial p-5 group">
                 {item.coverImage && (
-                  <div className="aspect-video bg-[#262626] mb-4 overflow-hidden">
-                    <img src={item.coverImage} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div className="relative aspect-video bg-[#262626] mb-4 overflow-hidden">
+                    <Image src={item.coverImage} alt={item.title} fill unoptimized sizes="(min-width: 768px) 33vw, 100vw" className="object-cover group-hover:scale-105 transition-transform duration-300" />
                   </div>
                 )}
                 <p className="text-[9px] text-[#444444] mb-2 tracking-widest">

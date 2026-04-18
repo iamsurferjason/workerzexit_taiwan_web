@@ -19,7 +19,15 @@ export default function AdminCategoriesPage() {
     const res = await fetch('/api/admin/categories')
     setItems(await res.json())
   }
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    async function loadCategories() {
+      const res = await fetch('/api/admin/categories')
+      const data: Category[] = await res.json()
+      setItems(data)
+    }
+
+    void loadCategories()
+  }, [])
 
   function generateSlug(name: string) {
     const map: Record<string, string> = { '腰道具 / 工具袋': 'waist-tools', '攜行收納': 'storage-bags', '水平測量工具': 'measuring-tools', '安全護具': 'safety-gear', '五金配件': 'accessories' }

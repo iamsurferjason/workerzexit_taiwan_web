@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
-import { useState } from 'react'
 
 type Promotion = {
   id: string
@@ -45,10 +44,13 @@ function HeroBanner({ promo }: { promo: Promotion }) {
   const inner = (
     <div className="relative w-full overflow-hidden" style={{ minHeight: '60vh' }}>
       {promo.imageUrl ? (
-        <img
+        <Image
           src={promo.imageUrl}
           alt={promo.title}
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          fill
+          unoptimized
+          sizes="100vw"
+          className="object-cover object-center"
         />
       ) : (
         <div className="absolute inset-0 bg-[#111111]" />
@@ -107,10 +109,13 @@ function SecondaryBanner({ promo }: { promo: Promotion }) {
   const inner = (
     <div className="relative overflow-hidden group" style={{ minHeight: '320px' }}>
       {promo.imageUrl ? (
-        <img
+        <Image
           src={promo.imageUrl}
           alt={promo.title}
-          className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+          fill
+          unoptimized
+          sizes="(min-width: 768px) 50vw, 100vw"
+          className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
         />
       ) : (
         <div className="absolute inset-0 bg-[#1A1A1A]" />

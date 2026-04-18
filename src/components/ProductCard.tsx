@@ -1,7 +1,8 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
 
-type Product = {
+export type ProductCardProduct = {
   id: string
   name: string
   slug: string
@@ -28,7 +29,7 @@ function ProductPlaceholder({ name }: { name: string }) {
   )
 }
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({ product }: { product: ProductCardProduct }) {
   const mainImage = product.images[0]?.url
   const isSoldOut = product.tags.includes('SOLD_OUT')
 
@@ -38,10 +39,13 @@ export default function ProductCard({ product }: { product: Product }) {
       <Link href={`/products/${product.slug}`} className="block">
         <div className="relative aspect-square bg-[#141414] overflow-hidden">
           {mainImage ? (
-            <img
+            <Image
               src={mainImage}
               alt={product.images[0]?.alt || product.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              fill
+              unoptimized
+              sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
             <ProductPlaceholder name={product.name} />

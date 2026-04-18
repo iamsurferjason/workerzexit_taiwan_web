@@ -10,6 +10,19 @@ type Promotion = {
   startsAt: string | null; endsAt: string | null; sortOrder: number
 }
 
+type PromotionForm = {
+  title: string
+  subtitle: string
+  imageUrl: string
+  ctaText: string
+  ctaUrl: string
+  layout: string
+  isActive: boolean
+  startsAt: string
+  endsAt: string
+  sortOrder: string
+}
+
 const inputCls = 'w-full bg-[#262626] border border-[#2A2A2A] text-[#EDEDED] px-3 py-2.5 text-sm focus:outline-none focus:border-[#FFFFFF]'
 
 export default function AdminPromotionsPage() {
@@ -17,7 +30,7 @@ export default function AdminPromotionsPage() {
   const [showModal, setShowModal] = useState(false)
   const [editItem, setEditItem] = useState<Promotion | null>(null)
   const [loading, setLoading] = useState(false)
-  const [form, setForm] = useState({ title: '', subtitle: '', imageUrl: '', ctaText: '', ctaUrl: '', layout: 'FULL_WIDTH', isActive: true, startsAt: '', endsAt: '', sortOrder: '0' })
+  const [form, setForm] = useState<PromotionForm>({ title: '', subtitle: '', imageUrl: '', ctaText: '', ctaUrl: '', layout: 'FULL_WIDTH', isActive: true, startsAt: '', endsAt: '', sortOrder: '0' })
 
   function resetForm(p?: Promotion) {
     setForm({
@@ -33,7 +46,15 @@ export default function AdminPromotionsPage() {
     setItems(await res.json())
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    async function loadPromotions() {
+      const res = await fetch('/api/admin/promotions')
+      const data: Promotion[] = await res.json()
+      setItems(data)
+    }
+
+    void loadPromotions()
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -105,16 +126,16 @@ export default function AdminPromotionsPage() {
               <button onClick={() => setShowModal(false)} className="text-[#888888] hover:text-[#EDEDED]">✕</button>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              {[
+              {([
                 { key: 'title', label: '標題 *', required: true },
                 { key: 'subtitle', label: '副標題', required: false },
                 { key: 'imageUrl', label: '圖片 URL', required: false },
                 { key: 'ctaText', label: 'CTA 按鈕文字', required: false },
                 { key: 'ctaUrl', label: 'CTA 連結', required: false },
-              ].map((f) => (
+              ] as const).map((f) => (
                 <div key={f.key}>
                   <label className="block text-xs text-[#888888] mb-1.5 uppercase tracking-widest">{f.label}</label>
-                  <input required={f.required} value={(form as any)[f.key]} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })} className={inputCls} />
+                  <input required={f.required} value={form[f.key]} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })} className={inputCls} />
                 </div>
               ))}
               <div>

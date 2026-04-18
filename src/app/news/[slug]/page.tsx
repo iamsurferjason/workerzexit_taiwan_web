@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -80,7 +81,9 @@ export default async function NewsDetailPage({
         </p>
         <h1 className="text-3xl font-bold text-[#EDEDED] mb-8">{news.title}</h1>
         {news.coverImage && (
-          <img src={news.coverImage} alt={news.title} className="w-full aspect-video object-cover mb-8" />
+          <div className="relative w-full aspect-video mb-8">
+            <Image src={news.coverImage} alt={news.title} fill unoptimized sizes="(min-width: 1024px) 768px, 100vw" className="object-cover" />
+          </div>
         )}
         <div
           className="prose prose-invert prose-sm max-w-none text-[#AAAAAA] leading-relaxed"

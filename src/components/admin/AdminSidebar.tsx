@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
+import type { Session } from 'next-auth'
 import {
   LayoutDashboard, Package, FolderOpen, Image, Megaphone,
   Newspaper, Users, Settings, LogOut, Menu, X,
@@ -20,9 +21,7 @@ const navItems = [
   { href: '/admin/settings', label: '網站設定', icon: Settings },
 ]
 
-type User = { name?: string | null; email?: string | null; role?: string }
-
-export default function AdminSidebar({ user }: { user: User }) {
+export default function AdminSidebar({ user }: { user: Session['user'] }) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
 

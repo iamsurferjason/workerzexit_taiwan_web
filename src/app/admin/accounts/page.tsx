@@ -20,7 +20,15 @@ export default function AdminAccountsPage() {
     setAccounts(await res.json())
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    async function loadAccounts() {
+      const res = await fetch('/api/admin/accounts')
+      const data: Account[] = await res.json()
+      setAccounts(data)
+    }
+
+    void loadAccounts()
+  }, [])
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()

@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ExternalLink, ArrowLeft } from 'lucide-react'
-import ProductCard from '@/components/ProductCard'
+import ProductCard, { type ProductCardProduct } from '@/components/ProductCard'
 import { cache } from 'react'
 import { absoluteUrl, buildMetadata, truncateDescription } from '@/lib/seo'
 
@@ -122,12 +123,15 @@ export default async function ProductDetailPage({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Image Gallery */}
         <div className="space-y-3">
-          <div className="aspect-square bg-[#1A1A1A] border border-[#2A2A2A] overflow-hidden">
+          <div className="relative aspect-square bg-[#1A1A1A] border border-[#2A2A2A] overflow-hidden">
             {product.images[0] ? (
-              <img
+              <Image
                 src={product.images[0].url}
                 alt={product.images[0].alt || product.name}
-                className="w-full h-full object-contain"
+                fill
+                unoptimized
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-contain"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
@@ -138,8 +142,8 @@ export default async function ProductDetailPage({
           {product.images.length > 1 && (
             <div className="grid grid-cols-4 gap-2">
               {product.images.slice(1).map((img, i) => (
-                <div key={i} className="aspect-square bg-[#1A1A1A] border border-[#2A2A2A] overflow-hidden">
-                  <img src={img.url} alt={img.alt || product.name} className="w-full h-full object-cover" />
+                <div key={i} className="relative aspect-square bg-[#1A1A1A] border border-[#2A2A2A] overflow-hidden">
+                  <Image src={img.url} alt={img.alt || product.name} fill unoptimized sizes="25vw" className="object-cover" />
                 </div>
               ))}
             </div>
@@ -232,7 +236,7 @@ export default async function ProductDetailPage({
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {related.map((p) => (
-              <ProductCard key={p.id} product={p as any} />
+              <ProductCard key={p.id} product={p as ProductCardProduct} />
             ))}
           </div>
         </div>

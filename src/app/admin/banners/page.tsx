@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Plus, Pencil, Trash2, Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
@@ -19,7 +20,15 @@ export default function AdminBannersPage() {
     const res = await fetch('/api/admin/banners')
     setItems(await res.json())
   }
-  useEffect(() => { load() }, [])
+  useEffect(() => {
+    async function loadBanners() {
+      const res = await fetch('/api/admin/banners')
+      const data: Banner[] = await res.json()
+      setItems(data)
+    }
+
+    void loadBanners()
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -56,8 +65,8 @@ export default function AdminBannersPage() {
       <div className="grid grid-cols-1 gap-3">
         {items.map((b) => (
           <div key={b.id} className="bg-[#1A1A1A] border border-[#2A2A2A] p-4 flex items-center gap-4">
-            <div className="w-24 h-14 bg-[#262626] shrink-0 overflow-hidden">
-              {b.imageUrl && <img src={b.imageUrl} alt="" className="w-full h-full object-cover" />}
+            <div className="relative w-24 h-14 bg-[#262626] shrink-0 overflow-hidden">
+              {b.imageUrl && <Image src={b.imageUrl} alt={b.title || 'Banner preview'} fill unoptimized sizes="96px" className="object-cover" />}
             </div>
             <div className="flex-1">
               <p className="text-sm font-medium text-[#EDEDED]">{b.title || '（無標題）'}</p>

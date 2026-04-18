@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, ShoppingBag } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -29,13 +30,13 @@ export default function HeroCarousel({ banners: dbBanners, heading = 'WORKERZ\nE
   useEffect(() => {
     const timer = setInterval(() => {
       setTransitioning(true)
-      setTimeout(() => {
+      window.setTimeout(() => {
         setCurrent((prev) => (prev + 1) % banners.length)
         setTransitioning(false)
       }, 600)
     }, INTERVAL)
     return () => clearInterval(timer)
-  }, [])
+  }, [banners.length])
 
   function goTo(index: number) {
     if (index === current) return
@@ -55,10 +56,13 @@ export default function HeroCarousel({ banners: dbBanners, heading = 'WORKERZ\nE
           className="absolute inset-0 transition-opacity duration-700"
           style={{ opacity: i === current ? (transitioning ? 0 : 1) : 0 }}
         >
-          <img
+          <Image
             src={banner.imageUrl}
             alt="WORKERZ EXIT"
-            className="w-full h-full object-cover object-center"
+            fill
+            unoptimized
+            sizes="100vw"
+            className="object-cover object-center"
           />
         </div>
       ))}
@@ -74,9 +78,11 @@ export default function HeroCarousel({ banners: dbBanners, heading = 'WORKERZ\nE
         <div className="max-w-2xl">
           {/* Brand mark */}
           <div className="flex items-center gap-5 md:gap-6 mb-10 md:mb-14 mt-4">
-            <img
+            <Image
               src="/images/logo.jpg"
               alt="WORKERZ EXIT"
+              width={80}
+              height={80}
               className="w-16 h-16 md:w-20 md:h-20 shrink-0 object-contain mix-blend-screen opacity-95"
             />
             <div className="h-10 md:h-12 w-[2px] shrink-0 bg-white/40" />

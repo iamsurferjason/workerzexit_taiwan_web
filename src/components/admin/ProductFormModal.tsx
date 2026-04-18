@@ -21,6 +21,21 @@ type Product = {
   category: { name: string }
 }
 
+type ProductForm = {
+  name: string
+  slug: string
+  description: string
+  price: string
+  externalUrl: string
+  categoryId: string
+  tags: string[]
+  isFeatured: boolean
+  isActive: boolean
+  sortOrder: string
+  imageUrl: string
+  imageAlt: string
+}
+
 const TAG_OPTIONS = [
   { value: 'NEW', label: 'NEW（新品）' },
   { value: 'FEATURED', label: '精選' },
@@ -39,7 +54,7 @@ export default function ProductFormModal({
 }) {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(false)
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<ProductForm>({
     name: product?.name || '',
     slug: product?.slug || '',
     description: product?.description || '',
@@ -55,10 +70,16 @@ export default function ProductFormModal({
   })
 
   useEffect(() => {
-    fetch('/api/admin/categories').then((r) => r.json()).then(setCategories)
+    async function loadCategories() {
+      const response = await fetch('/api/admin/categories')
+      const data: Category[] = await response.json()
+      setCategories(data)
+    }
+
+    void loadCategories()
   }, [])
 
-  function set(key: string, value: any) {
+  function setField<Key extends keyof ProductForm>(key: Key, value: ProductForm[Key]) {
     setForm((f) => ({ ...f, [key]: value }))
   }
 
@@ -118,29 +139,29 @@ export default function ProductFormModal({
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <Field label="商品名稱 *">
-            <input required value={form.name} onChange={(e) => { set('name', e.target.value); if (!product) set('slug', generateSlug(e.target.value)) }} className={inputCls} />
+            <input required value={form.name} onChange={(e) => { setField('name', e.target.value); if (!product) setField('slug', generateSlug(e.target.value)) }} className={inputCls} />
           </Field>
           <Field label="Slug (URL)">
-            <input value={form.slug} onChange={(e) => set('slug', e.target.value)} className={inputCls} placeholder="auto-generated" />
+            <input value={form.slug} onChange={(e) => setField('slug', e.target.value)} className={inputCls} placeholder="auto-generated" />
           </Field>
           <Field label="分類 *">
-            <select required value={form.categoryId} onChange={(e) => set('categoryId', e.target.value)} className={inputCls}>
+            <select required value={form.categoryId} onChange={(e) => setField('categoryId', e.target.value)} className={inputCls}>
               <option value="">請選擇分類</option>
               {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </Field>
           <Field label="價格 (NT$) *">
-            <input required type="number" min="0" value={form.price} onChange={(e) => set('price', e.target.value)} className={inputCls} />
+            <input required type="number" min="0" value={form.price} onChange={(e) => setField('price', e.target.value)} className={inputCls} />
           </Field>
           <Field label="Panrico 商品連結 *">
-            <input required type="url" value={form.externalUrl} onChange={(e) => set('externalUrl', e.target.value)} className={inputCls} placeholder="https://panricopro.com/..." />
+            <input required type="url" value={form.externalUrl} onChange={(e) => setField('externalUrl', e.target.value)} className={inputCls} placeholder="https://panricopro.com/..." />
           </Field>
           <Field label="商品描述">
-            <textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={3} className={inputCls + ' resize-none'} />
+            <textarea value={form.description} onChange={(e) => setField('description', e.target.value)} rows={3} className={inputCls + ' resize-none'} />
           </Field>
           <Field label="商品圖片 URL">
-            <input type="url" value={form.imageUrl} onChange={(e) => set('imageUrl', e.target.value)} className={inputCls} placeholder="https://..." />
-            <input value={form.imageAlt} onChange={(e) => set('imageAlt', e.target.value)} className={inputCls + ' mt-2'} placeholder="圖片說明（alt）" />
+            <input type="url" value={form.imageUrl} onChange={(e) => setField('imageUrl', e.target.value)} className={inputCls} placeholder="https://..." />
+            <input value={form.imageAlt} onChange={(e) => setField('imageAlt', e.target.value)} className={inputCls + ' mt-2'} placeholder="圖片說明（alt）" />
           </Field>
           <Field label="標籤">
             <div className="flex flex-wrap gap-2">
@@ -153,15 +174,15 @@ export default function ProductFormModal({
             </div>
           </Field>
           <Field label="排序">
-            <input type="number" value={form.sortOrder} onChange={(e) => set('sortOrder', e.target.value)} className={inputCls} />
+            <input type="number" value={form.sortOrder} onChange={(e) => setField('sortOrder', e.target.value)} className={inputCls} />
           </Field>
           <div className="flex gap-6">
             <label className="flex items-center gap-2 text-sm text-[#AAAAAA] cursor-pointer">
-              <input type="checkbox" checked={form.isFeatured} onChange={(e) => set('isFeatured', e.target.checked)} className="accent-[#FFFFFF]" />
+              <input type="checkbox" checked={form.isFeatured} onChange={(e) => setField('isFeatured', e.target.checked)} className="accent-[#FFFFFF]" />
               精選商品（首頁顯示）
             </label>
             <label className="flex items-center gap-2 text-sm text-[#AAAAAA] cursor-pointer">
-              <input type="checkbox" checked={form.isActive} onChange={(e) => set('isActive', e.target.checked)} className="accent-[#FFFFFF]" />
+              <input type="checkbox" checked={form.isActive} onChange={(e) => setField('isActive', e.target.checked)} className="accent-[#FFFFFF]" />
               上架顯示
             </label>
           </div>

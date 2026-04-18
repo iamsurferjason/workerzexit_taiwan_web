@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { PrismaClient, AdminRole, ProductTag, NewsStatus, PromotionLayout } from '@prisma/client'
+import { PrismaClient, AdminRole, ProductTag } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import bcrypt from 'bcryptjs'
 import { Pool } from 'pg'

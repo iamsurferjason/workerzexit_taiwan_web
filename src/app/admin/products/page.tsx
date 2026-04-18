@@ -1,23 +1,19 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Plus, Pencil, Trash2, Eye, EyeOff } from 'lucide-react'
 import ProductFormModal from '@/components/admin/ProductFormModal'
+import type { ProductCardProduct } from '@/components/ProductCard'
 
-type Product = {
+type Product = ProductCardProduct & {
   id: string
-  name: string
-  slug: string
   description: string | null
-  price: number
-  externalUrl: string
   categoryId: string
   isActive: boolean
   isFeatured: boolean
   sortOrder: number
   tags: string[]
-  category: { name: string }
-  images: { url: string; alt: string | null }[]
 }
 
 export default function AdminProductsPage() {
@@ -34,7 +30,16 @@ export default function AdminProductsPage() {
     setLoading(false)
   }
 
-  useEffect(() => { loadProducts() }, [])
+  useEffect(() => {
+    async function initialLoad() {
+      const res = await fetch('/api/admin/products')
+      const data: Product[] = await res.json()
+      setProducts(data)
+      setLoading(false)
+    }
+
+    void initialLoad()
+  }, [])
 
   async function toggleActive(id: string, isActive: boolean) {
     await fetch(`/api/admin/products/${id}`, {
@@ -84,9 +89,9 @@ export default function AdminProductsPage() {
                 {products.map((p) => (
                   <tr key={p.id} className="hover:bg-[#262626] transition-colors">
                     <td className="px-4 py-3">
-                      <div className="w-12 h-12 bg-[#262626] border border-[#2A2A2A] overflow-hidden shrink-0">
+                      <div className="relative w-12 h-12 bg-[#262626] border border-[#2A2A2A] overflow-hidden shrink-0">
                         {p.images[0] ? (
-                          <img src={p.images[0].url} alt={p.name} className="w-full h-full object-cover" />
+                          <Image src={p.images[0].url} alt={p.name} fill unoptimized sizes="48px" className="object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-[10px] text-[#333] font-bold">WE</div>
                         )}
