@@ -1,10 +1,18 @@
+import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import ProductCard from '@/components/ProductCard'
 import Link from 'next/link'
+import { buildMetadata } from '@/lib/seo'
 
 export const revalidate = 60
 
 type SearchParams = { category?: string }
+
+export const metadata: Metadata = buildMetadata({
+  title: '所有商品',
+  description: '瀏覽 WORKERZ EXIT 全系列商品，包含工具腰袋、收納袋、安全護具、水平測量工具與五金配件。',
+  path: '/products',
+})
 
 async function getProducts(categorySlug?: string) {
   try {

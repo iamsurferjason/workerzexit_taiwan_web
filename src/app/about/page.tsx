@@ -1,10 +1,13 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ShoppingBag } from 'lucide-react'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata = {
+export const metadata: Metadata = buildMetadata({
   title: '品牌故事',
-  description: 'WORKERZ EXIT 日本職人工具品牌台灣總代理品牌介紹',
-}
+  description: '認識 WORKERZ EXIT 品牌故事、職人工藝理念與台灣授權總代理資訊。',
+  path: '/about',
+})
 
 export default function AboutPage() {
   return (

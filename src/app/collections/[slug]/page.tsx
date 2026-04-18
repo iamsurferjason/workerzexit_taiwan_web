@@ -1,16 +1,13 @@
+import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import ProductCard from '@/components/ProductCard'
 import Link from 'next/link'
+import { cache } from 'react'
+import { buildMetadata } from '@/lib/seo'
 
-export default async function CollectionPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}) {
-  const { slug } = await params
-
-  const category = await prisma.category.findUnique({
+const getCategory = cache(async (slug: string) => {
+  return prisma.category.findUnique({
     where: { slug, isActive: true },
     include: {
       products: {
@@ -20,6 +17,41 @@ export default async function CollectionPage({
       },
     },
   }).catch(() => null)
+})
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const category = await getCategory(slug)
+
+  if (!category) {
+    return buildMetadata({
+      title: '分類不存在',
+      description: '找不到指定商品分類。',
+      path: `/collections/${slug}`,
+      noIndex: true,
+    })
+  }
+
+  return buildMetadata({
+    title: category.name,
+    description: `瀏覽 WORKERZ EXIT ${category.name} 全系列商品，查看分類商品、圖片與授權購買資訊。`,
+    path: `/collections/${category.slug}`,
+    image: category.products[0]?.images[0]?.url || null,
+  })
+}
+
+export default async function CollectionPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+
+  const category = await getCategory(slug)
 
   if (!category) notFound()
 

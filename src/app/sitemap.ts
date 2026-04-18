@@ -1,31 +1,48 @@
 import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
+import { getSiteUrl } from '@/lib/seo'
 
 export const revalidate = 3600 // 每一小時重新產出 Sitemap
 
+type SitemapEntity = {
+  slug: string
+  updatedAt: Date
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://workerzexit.tw'
+  const baseUrl = getSiteUrl()
 
   // 動態獲取商品
-  let products: any[] = []
+  let products: SitemapEntity[] = []
   try {
     products = await prisma.product.findMany({
       where: { isActive: true },
       select: { slug: true, updatedAt: true },
     })
-  } catch (e) {
+  } catch {
     console.error("Failed to fetch products for sitemap")
   }
 
   // 動態獲取最新消息
-  let news: any[] = []
+  let news: SitemapEntity[] = []
   try {
     news = await prisma.news.findMany({
       where: { status: 'PUBLISHED' },
       select: { slug: true, updatedAt: true },
     })
-  } catch (e) {
+  } catch {
     console.error("Failed to fetch news for sitemap")
+  }
+
+  let categories: SitemapEntity[] = []
+  try {
+    categories = await prisma.category.findMany({
+      where: { isActive: true },
+      select: { slug: true, updatedAt: true },
+      orderBy: { sortOrder: 'asc' },
+    })
+  } catch {
+    console.error('Failed to fetch categories for sitemap')
   }
 
   const productEntries = products.map((p) => ({
@@ -42,14 +59,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
+  const categoryEntries = categories.map((category) => ({
+    url: `${baseUrl}/collections/${category.slug}`,
+    lastModified: category.updatedAt,
+    changeFrequency: 'weekly' as const,
+    priority: 0.9,
+  }))
+
   const staticRoutes = [
     '',
     '/products',
-    '/collections/waist-tools',
-    '/collections/storage-bags',
-    '/collections/measuring-tools',
-    '/collections/safety-gear',
-    '/collections/accessories',
     '/news',
     '/about',
     '/contact',
@@ -60,5 +79,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route === '' ? 1 : 0.9,
   }))
 
-  return [...staticRoutes, ...productEntries, ...newsEntries]
+  return [...staticRoutes, ...categoryEntries, ...productEntries, ...newsEntries]
 }

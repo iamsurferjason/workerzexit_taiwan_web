@@ -1,13 +1,14 @@
 import { MetadataRoute } from 'next'
+import { getSiteUrl } from '@/lib/seo'
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://workerzexit.tw'
+  const baseUrl = getSiteUrl()
 
   return {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/api/'],
+      disallow: ['/admin', '/admin/', '/api', '/api/'],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   }

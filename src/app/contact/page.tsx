@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Mail, Phone, MapPin, ExternalLink } from 'lucide-react'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata = { title: '聯絡我們' }
+export const metadata: Metadata = buildMetadata({
+  title: '聯絡我們',
+  description: '聯絡 WORKERZ EXIT 台灣總代理，取得商品、採購與代理合作相關資訊。',
+  path: '/contact',
+})
 
 async function getSettings() {
   try {

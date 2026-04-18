@@ -1,14 +1,55 @@
+import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ExternalLink, ArrowLeft } from 'lucide-react'
 import ProductCard from '@/components/ProductCard'
+import { cache } from 'react'
+import { absoluteUrl, buildMetadata, truncateDescription } from '@/lib/seo'
 
 const tagLabels: Record<string, string> = {
   NEW: 'NEW',
   SOLD_OUT: '已售完',
   FEATURED: '精選',
   SALE: '特價',
+}
+
+const getProduct = cache(async (slug: string) => {
+  return prisma.product.findUnique({
+    where: { slug, isActive: true },
+    include: {
+      images: { orderBy: { sortOrder: 'asc' } },
+      category: true,
+    },
+  }).catch(() => null)
+})
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const product = await getProduct(slug)
+
+  if (!product) {
+    return buildMetadata({
+      title: '商品不存在',
+      description: '找不到指定商品。',
+      path: `/products/${slug}`,
+      noIndex: true,
+    })
+  }
+
+  return buildMetadata({
+    title: product.name,
+    description: truncateDescription(
+      product.description ||
+        `${product.category.name}商品頁，查看 WORKERZ EXIT ${product.name} 的規格、圖片與授權購買資訊。`
+    ),
+    path: `/products/${product.slug}`,
+    image: product.images[0]?.url || null,
+  })
 }
 
 export default async function ProductDetailPage({
@@ -18,13 +59,7 @@ export default async function ProductDetailPage({
 }) {
   const { slug } = await params
 
-  const product = await prisma.product.findUnique({
-    where: { slug, isActive: true },
-    include: {
-      images: { orderBy: { sortOrder: 'asc' } },
-      category: true,
-    },
-  }).catch(() => null)
+  const product = await getProduct(slug)
 
   if (!product) notFound()
 
@@ -42,6 +77,34 @@ export default async function ProductDetailPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: product.name,
+            image: product.images.map((image) => image.url),
+            description:
+              product.description ||
+              `${product.category.name}商品頁，查看 ${product.name} 的圖片與授權購買資訊。`,
+            brand: {
+              '@type': 'Brand',
+              name: 'WORKERZ EXIT',
+            },
+            category: product.category.name,
+            offers: {
+              '@type': 'Offer',
+              priceCurrency: 'TWD',
+              price: product.price,
+              availability: product.tags.includes('SOLD_OUT')
+                ? 'https://schema.org/OutOfStock'
+                : 'https://schema.org/InStock',
+              url: absoluteUrl(`/products/${product.slug}`),
+            },
+          }),
+        }}
+      />
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-[#555555] mb-8">
         <Link href="/products" className="flex items-center gap-1 hover:text-[#FFFFFF] transition-colors">

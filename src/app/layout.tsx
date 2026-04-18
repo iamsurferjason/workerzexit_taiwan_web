@@ -4,6 +4,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { Toaster } from '@/components/ui/sonner'
+import { absoluteUrl, getSiteUrl, siteConfig } from '@/lib/seo'
 
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -20,17 +21,37 @@ const notoSansTC = Noto_Sans_TC({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://workerzexit.tw'),
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: 'WORKERZ EXIT 台灣總代理 | 日本職人工具腰道具',
     template: '%s | WORKERZ EXIT 台灣',
   },
-  description: '日本職人工具品牌 WORKERZ EXIT 台灣總代理。提供最高品質的工具腰袋、安全護具、EBISU 水平尺等專業工具配件。',
+  description: siteConfig.description,
   keywords: ['WORKERZ EXIT', '腰道具', '工具袋', '日本職人工具', 'EBISU水平尺', '安全帶', '台灣'],
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: 'website',
-    locale: 'zh_TW',
-    siteName: 'WORKERZ EXIT 台灣總代理',
+    locale: siteConfig.locale,
+    siteName: siteConfig.name,
+    url: '/',
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [
+      {
+        url: absoluteUrl(siteConfig.ogImage),
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [absoluteUrl(siteConfig.ogImage)],
   },
 }
 

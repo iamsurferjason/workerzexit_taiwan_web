@@ -1,6 +1,14 @@
+import type { Metadata } from 'next'
 import { auth } from '@/lib/auth'
-import { redirect } from 'next/navigation'
 import AdminSidebar from '@/components/admin/AdminSidebar'
+import { buildMetadata } from '@/lib/seo'
+
+export const metadata: Metadata = buildMetadata({
+  title: '後台管理',
+  description: 'WORKERZ EXIT 後台管理登入與內容維護頁面。',
+  path: '/admin',
+  noIndex: true,
+})
 
 export default async function AdminLayout({
   children,

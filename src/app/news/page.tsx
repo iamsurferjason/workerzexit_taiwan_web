@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata = { title: '最新消息' }
+export const metadata: Metadata = buildMetadata({
+  title: '最新消息',
+  description: '查看 WORKERZ EXIT 台灣總代理的最新消息、活動公告、到貨資訊與品牌更新。',
+  path: '/news',
+})
 
 export default async function NewsPage() {
   const news = await prisma.news.findMany({

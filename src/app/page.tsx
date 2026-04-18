@@ -4,6 +4,13 @@ import { prisma } from '@/lib/prisma'
 import ProductCard from '@/components/ProductCard'
 import PromotionBlock from '@/components/PromotionBlock'
 import HeroCarousel from '@/components/HeroCarousel'
+import { absoluteUrl, buildMetadata, siteConfig } from '@/lib/seo'
+
+export const metadata = buildMetadata({
+  description:
+    'WORKERZ EXIT 台灣總代理官網，提供日本職人工具腰袋、安全護具、水平測量工具與授權通路資訊。',
+  path: '/',
+})
 
 export const revalidate = 60 // 每 60 秒重新驗證
 
@@ -85,8 +92,37 @@ export default async function HomePage() {
     getHeroHeading(),
   ])
 
+  const organizationJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${absoluteUrl()}/#organization`,
+        name: siteConfig.name,
+        url: absoluteUrl(),
+        logo: absoluteUrl('/images/logo.jpg'),
+        image: absoluteUrl(siteConfig.ogImage),
+        description: siteConfig.description,
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${absoluteUrl()}/#website`,
+        url: absoluteUrl(),
+        name: siteConfig.name,
+        inLanguage: 'zh-TW',
+        publisher: {
+          '@id': `${absoluteUrl()}/#organization`,
+        },
+      },
+    ],
+  }
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
       {/* ── Hero Carousel ── */}
       <HeroCarousel banners={banners} heading={heroHeading} />
 
