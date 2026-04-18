@@ -538,6 +538,7 @@ async function main() {
   const settings = [
     { key: 'site_name', value: 'WORKERZ EXIT 台灣總代理' },
     { key: 'site_description', value: '日本職人工具腰道具品牌台灣總代理，提供最高品質的工具袋、安全護具、水平儀等專業工具配件。' },
+    { key: 'hero_heading', value: '職人工具\n腰帶系統' },
     { key: 'contact_email', value: 'info@workerzexit.tw' },
     { key: 'contact_phone', value: '' },
     { key: 'contact_address', value: '台灣' },
@@ -549,7 +550,7 @@ async function main() {
   for (const setting of settings) {
     await prisma.siteSetting.upsert({
       where: { key: setting.key },
-      update: {},
+      update: setting.key === 'hero_heading' ? { value: setting.value } : {},
       create: setting,
     })
   }
