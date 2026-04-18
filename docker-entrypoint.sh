@@ -29,5 +29,8 @@ rm -f "$MIGRATE_LOG"
 echo "[entrypoint] Ensuring bootstrap admin user exists..."
 node scripts/prepare-runtime.mjs
 
+echo "[entrypoint] Syncing canonical site content when needed..."
+node scripts/sync-content.mjs
+
 echo "[entrypoint] Starting Next.js server..."
 exec node server.js
