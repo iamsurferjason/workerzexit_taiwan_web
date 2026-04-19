@@ -217,10 +217,10 @@ export default async function ProductDetailPage({
             </div>
             <div className="flex gap-2 text-sm">
               <span className="text-[#555555] w-20">品牌</span>
-              <span className="text-[#AAAAAA]">WORKERZ EXIT（日本製）</span>
+              <span className="text-[#AAAAAA]">WORKERZ EXIT（日本原裝進口）</span>
             </div>
             <div className="flex gap-2 text-sm">
-              <span className="text-[#555555] w-20">代理商</span>
+              <span className="text-[#555555] w-20">總經銷</span>
               <span className="text-[#AAAAAA]">百利世貿易有限公司</span>
             </div>
           </div>
