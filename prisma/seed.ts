@@ -539,18 +539,26 @@ async function main() {
     { key: 'site_name', value: 'WORKERZ EXIT 台灣總代理' },
     { key: 'site_description', value: '日本職人工具腰道具品牌台灣總代理，提供最高品質的工具袋、安全護具、水平儀等專業工具配件。' },
     { key: 'hero_heading', value: '職人工具\n腰帶系統' },
-    { key: 'contact_email', value: 'info@workerzexit.tw' },
-    { key: 'contact_phone', value: '' },
-    { key: 'contact_address', value: '台灣' },
+    { key: 'contact_email', value: 'monstertool@orka-hw.com' },
+    { key: 'contact_phone', value: '04-22362331' },
+    { key: 'contact_address', value: '台中市北屯區崇德五路17號1樓' },
     { key: 'instagram_url', value: '' },
     { key: 'facebook_url', value: '' },
     { key: 'line_url', value: '' },
     { key: 'shop_url', value: 'https://panricopro.com/collections/exit%E6%97%A5%E6%9C%AC%E8%81%B7%E4%BA%BA%E7%B3%BB%E5%88%97' },
   ]
+  const managedSettingKeys = new Set([
+    'site_name',
+    'site_description',
+    'hero_heading',
+    'contact_email',
+    'contact_phone',
+    'contact_address',
+  ])
   for (const setting of settings) {
     await prisma.siteSetting.upsert({
       where: { key: setting.key },
-      update: setting.key === 'hero_heading' ? { value: setting.value } : {},
+      update: managedSettingKeys.has(setting.key) ? { value: setting.value } : {},
       create: setting,
     })
   }

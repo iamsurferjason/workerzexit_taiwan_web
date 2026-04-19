@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMetadata({
   title: '聯絡我們',
-  description: '聯絡 WORKERZ EXIT 台灣總代理，取得商品、採購與代理合作相關資訊。',
+  description: '聯絡 WORKERZ EXIT 台灣官方授權總代理明禹工業有限公司，取得商品、採購與代理合作相關資訊。',
   path: '/contact',
 })
 
@@ -41,7 +41,7 @@ export default async function ContactPage() {
             <div className="w-8 h-0.5 bg-[#FFFFFF] mb-6" />
             <h2 className="text-2xl font-bold text-[#EDEDED] mb-4">台灣授權總代理</h2>
             <p className="text-[#AAAAAA] leading-relaxed mb-8">
-              百利世貿易有限公司（Panrico）為 WORKERZ EXIT 台灣官方授權總代理，如有商品、採購或代理合作等相關問題，歡迎與我們聯繫。
+              明禹工業有限公司（MONSTER TOOL）為 WORKERZ EXIT 台灣官方授權總代理，目前百利世貿易有限公司（Panrico）為台灣市場通路的總經銷，如有商品、採購或代理合作等相關問題，歡迎與我們聯繫。
             </p>
 
             <div className="space-y-5">
@@ -83,7 +83,7 @@ export default async function ContactPage() {
             <div className="w-8 h-0.5 bg-[#FFFFFF] mb-6" />
             <h2 className="text-2xl font-bold text-[#EDEDED] mb-4">線上選購</h2>
             <p className="text-[#AAAAAA] leading-relaxed mb-8">
-              目前商品透過台灣授權代理通路 Panrico 進行銷售，點擊下方連結即可前往選購。
+              目前商品由台灣市場通路總經銷 Panrico 負責銷售，點擊下方連結即可前往選購。
             </p>
             <a
               href="https://panricopro.com/collections/exit%E6%97%A5%E6%9C%AC%E8%81%B7%E4%BA%BA%E7%B3%BB%E5%88%97"
