@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMetadata({
   title: '品牌故事',
-  description: '認識 WORKERZ EXIT 品牌故事、職人工藝理念與台灣授權總代理資訊。',
+  description: '認識 WORKERZ EXIT 品牌故事、職人工藝理念與台灣官方授權總代理資訊。',
   path: '/about',
 })
 
@@ -45,13 +45,13 @@ export default function AboutPage() {
 
             <div>
               <div className="w-8 h-0.5 bg-[#FFFFFF] mb-4" />
-              <h2 className="text-2xl font-bold text-[#EDEDED] mb-4">台灣總代理：百利世貿易</h2>
+              <h2 className="text-2xl font-bold text-[#EDEDED] mb-4">台灣官方授權總代理：明禹工業</h2>
               <div className="space-y-4 text-[#AAAAAA] leading-relaxed">
                 <p>
-                  百利世貿易有限公司（Panrico）為 WORKERZ EXIT 品牌台灣官方授權總代理商，致力於將日本頂級職人工具帶進台灣市場，服務台灣各行業的工班師傅。
+                  明禹工業有限公司（MONSTER TOOL）為 WORKERZ EXIT 品牌台灣官方授權總代理，負責台灣市場的品牌推廣與官方授權窗口，致力於將 WORKERZ EXIT 的專業職人工具系統引進台灣市場。
                 </p>
                 <p>
-                  透過台灣授權代理通路選購，您可享有完整的商品品質保障、正品認證，以及在地化的服務支援。
+                  百利世貿易有限公司（Panrico）為台灣市場通路總經銷，透過官方授權通路選購，您可享有完整的商品品質保障、正品認證，以及在地化的服務支援。
                 </p>
               </div>
             </div>
@@ -84,7 +84,7 @@ export default function AboutPage() {
       <section className="bg-[#111111] border-t border-[#2A2A2A] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-[#EDEDED] mb-4">準備好選購了嗎？</h2>
-          <p className="text-[#888888] mb-8">透過台灣授權代理通路，選購正品 WORKERZ EXIT 職人工具。</p>
+          <p className="text-[#888888] mb-8">透過台灣官方授權通路與總經銷通路，選購正品 WORKERZ EXIT 職人工具。</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/products" className="inline-flex items-center gap-2 border border-[#FFFFFF] text-[#FFFFFF] px-8 py-3 font-bold text-sm tracking-widest uppercase hover:bg-[#FFFFFF]/10 transition-colors">
               瀏覽商品

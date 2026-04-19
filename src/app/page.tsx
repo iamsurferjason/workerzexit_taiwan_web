@@ -177,7 +177,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-[#2A2A2A]">
             {[
               { icon: <Star size={22} className="text-[#555555]" />, title: '日本職人品質', desc: '嚴選日本原廠製造，每件商品經過職人精心製作，品質保證耐用可靠。' },
-              { icon: <Shield size={22} className="text-[#555555]" />, title: '台灣授權總代理', desc: '百利世貿易為 WORKERZ EXIT 台灣官方授權總代理，保障正品品質與售後服務。' },
+              { icon: <Shield size={22} className="text-[#555555]" />, title: '台灣官方授權', desc: '明禹工業有限公司（MONSTER TOOL）為 WORKERZ EXIT 台灣官方授權總代理，百利世貿易有限公司（Panrico）為台灣市場通路總經銷。' },
               { icon: <Truck size={22} className="text-[#555555]" />, title: '台灣在地服務', desc: '在地化服務支援，快速配送，讓台灣師傅享受最便捷的採購體驗。' },
             ].map((item, i) => (
               <div key={i} className="flex flex-col gap-4 p-8">
@@ -224,9 +224,9 @@ export default async function HomePage() {
       <section className="bg-[#111111] border-t border-[#2A2A2A] py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-[#555555] text-[10px] font-bold tracking-[0.3em] uppercase mb-4">AUTHORIZED DEALER</p>
-          <h2 className="text-4xl sm:text-5xl font-bold text-[#EDEDED] mb-4">台灣授權總代理</h2>
+          <h2 className="text-4xl sm:text-5xl font-bold text-[#EDEDED] mb-4">台灣官方授權通路</h2>
           <p className="text-[#888888] mb-8 max-w-md mx-auto leading-relaxed">
-            透過官方授權通路選購，享有完整商品保障與台灣在地服務支援。
+            明禹工業有限公司（MONSTER TOOL）為台灣官方授權總代理，百利世貿易有限公司（Panrico）為台灣市場通路總經銷。
           </p>
           <Link
             href="https://panricopro.com/collections/exit%E6%97%A5%E6%9C%AC%E8%81%B7%E4%BA%BA%E7%B3%BB%E5%88%97"

@@ -38,7 +38,7 @@ async function main() {
       {
         // Banner 3: Model back/side — Taiwan dealer
         title: 'TAIWAN OFFICIAL',
-        subtitle: '百利世貿易 — WORKERZ EXIT 台灣官方授權總代理，正品保障、在地服務、快速出貨。',
+        subtitle: '明禹工業（MONSTER TOOL）為 WORKERZ EXIT 台灣官方授權總代理，百利世貿易（Panrico）為台灣市場通路總經銷。',
         imageUrl: '/images/banners/banner-03.jpg',
         ctaText: '了解更多',
         ctaUrl: '/about',
